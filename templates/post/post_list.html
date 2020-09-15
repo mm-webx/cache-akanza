@@ -1,0 +1,42 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+    <form method="get">
+        {{ filter.form.as_p }}
+        <button type="submit">Search</button>
+    </form>
+
+    <table>
+        <tr>
+            <td>Id</td>
+            <td>title</td>
+            <td>content</td>
+            <td>created</td>
+            <td>author</td>
+        </tr>
+        {% for object in filter.qs %}
+            <tr>
+                <td>{{ object.id }}</td>
+                <td>{{ object.title }}</td>
+                <td>{{ object.content|slice:100 }}...</td>
+                <td>{{ object.created_at|date }}
+                    at {{ object.created_at|time }}</td>
+                <td>{{ object.author.get_full_name }}</td>
+            </tr>
+            {% for g in object.gallery_set.all %}
+                <tr>
+                    <td>title</td>
+                    <td>desc</td>
+                    <td>created</td>
+                    <td>photos count</td>
+                </tr>
+                <tr>
+                    <td>{{ g.title }}</td>
+                    <td>{{ g.description }}</td>
+                    <td>{{ g.created_at }}</td>
+                    <td>{{ g.photo_set.count }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
+{% endblock %}
